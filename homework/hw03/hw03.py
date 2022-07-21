@@ -165,7 +165,7 @@ def count_coins(change):
         if change < 5 or largest_coin == 1:
             return 1
         return devide(change-largest_coin, largest_coin)+devide(change, get_smaller_coin(largest_coin))
-    return devide(change,25)
+    return devide(change, 25)
     # not necessary to discuss
     if change >= 25:
         return devide(change, 25)
@@ -189,3 +189,69 @@ def count_coins(change):
         with_coin = constrained_count(change - smallest_coin, smallest_coin)
         return without_coin + with_coin
     return constrained_count(change, 1)
+
+# optional
+
+
+def collapse(n):
+    """Fall 2017 MT1 Q4a: Digital"""
+
+    """For non-negative N, the result of removing all digits that are equal
+    to the digit on their right, so that no adjacent digits are the same.
+    >>> collapse(1234)
+    1234
+    >>> collapse(12234441)
+    12341
+    >>> collapse(0)
+    0
+    >>> collapse(3)
+    3
+    >>> collapse(11200000013333)
+    12013
+    """
+    left, last = n // 10, n % 10
+    if n < 10:
+        return last
+    elif left % 10 == last:
+        return collapse(left)
+    else:
+        return collapse(left) * 10 + last
+
+
+def repeat_digits(n):
+    """Summer 2018 MT1 Q5a: Won't You Be My Neighbor?"""
+
+    """Given a positive integer N, returns a number with each digit repeated.
+    >>> repeat_digits(1234)
+    11223344
+    """
+    last, rest = n % 10*11, n//10
+    if n < 10:
+        return n
+    return repeat_digits(rest)*100+last
+
+
+def contains(a, b):
+    """Fall 2019 Final Q6b: Palindromes
+
+    Implement contains, which takes non-negative integers a and b. It returns whether all of the
+    digits of a also appear in order among the digits of b.
+
+    Important: You may not write str, repr, list, tuple, [, or ]"""
+
+    """Return whether the digits of a are contained in the digits of b.
+    >>> contains(357, 12345678)
+    True
+    >>> contains(753, 12345678)
+    False
+    >>> contains(357, 37)
+    False
+    """
+    if a == b:
+        return True
+    if a > b:
+        return False
+    if a % 10 == b % 10:
+        return contains(a//10, b//10)
+    else:
+        return contains(a, b//10)
