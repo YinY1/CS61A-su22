@@ -40,9 +40,17 @@ def scale(it, multiplier):
     [2, 4, 6, 8, 10]
     """
     "*** YOUR CODE HERE ***"
+    """ MY solution
+    
     l = iter(it)
     for _ in range(len(it)):
         yield next(l) * multiplier
+        
+    """
+
+    # alternative solution
+    for elem in it:
+        yield elem * multiplier
 
 
 def hailstone(n):
