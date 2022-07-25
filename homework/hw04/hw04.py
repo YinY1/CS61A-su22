@@ -27,7 +27,9 @@ def merge(lst1, lst2):
         return lst1 or lst2
     if lst2[0] <= lst1[0]:
         return lst2[0:1]+merge(lst1, lst2[1:])
-    return lst1[0:1]+merge(lst1[1:], lst2)
+    else:
+        return lst1[0:1]+merge(lst1[1:], lst2)
+        return [lst2[0]] + merge(lst1, lst2[1:])  # alternative solution
 
     # loop
     ret = []
@@ -69,11 +71,16 @@ def remove_odd_indices(lst, odd):
     True
     """
     "*** YOUR CODE HERE ***"
-    if lst == []:
+    if lst == []:  # equal to 'if not list'
         return []
     if odd:
         return lst[0:1]+remove_odd_indices(lst[2:], odd)
     return lst[1:2]+remove_odd_indices(lst[3:], not odd)
+    
+    # alternative solution
+    if odd:
+        return [lst[0]] + remove_odd_indices(lst[2:], odd)
+    return remove_odd_indices(lst[1:], not odd)
 
 
 class SmartFridge:
@@ -174,6 +181,8 @@ class VendingMachine:
     def add_funds(self, funds):
         if self.stock == 0:
             return f'Nothing left to vend. Please restock. Here is your ${funds}.'
+            # Alternatively, we could have:
+            # return self.vend() + f' Here is your ${n}.'
         self.balance += funds
         return f'Current balance: ${self.balance}'
 
