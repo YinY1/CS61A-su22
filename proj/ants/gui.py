@@ -364,13 +364,13 @@ def run(*args):
     import socketserver
     import webbrowser
     import sys
-    PORT = 8000
+    PORT = 31415
     global gui
     gui = GUI()
     gui.args = args
     # Basic HTTP Handler
     #Handler = http.server.SimpleHTTPRequestHandler
-    for PORT in range(8000, 8100):
+    for PORT in range(31415, 31420):
         try:
             httpd = CustomThreadingTCPServer(("", PORT), HttpHandler)
             break
