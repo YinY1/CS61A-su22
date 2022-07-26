@@ -132,7 +132,7 @@ def has_cycle_constant(link):
     False
     """
     "*** YOUR CODE HERE ***"
-    # O(1) solution
+    # Still O(n) solution
     if link is Link.empty:
         return False
     slow, fast = link, link.rest
@@ -150,7 +150,7 @@ def has_cycle_constant(link):
     Even if the 'fast' reach the HEAD and return T before reach the 'slow',
     it still cost (n//2 + 1).
     It's linear O(n), not constant O(1) ?
-    So, maybe it should call 'has_cycle_faster' instead of'constant' ?
+    So, maybe it should call 'has_cycle_faster' instead of'constant' ? 
     """
 
     # My WRONG linear solution
