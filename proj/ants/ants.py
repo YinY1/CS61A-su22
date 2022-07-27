@@ -54,6 +54,7 @@ class Insect:
 
     damage = 0
     # ADD CLASS ATTRIBUTES HERE
+    is_waterproof = False
 
     def __init__(self, health, place=None):
         """Create an Insect with a health amount and a starting PLACE."""
@@ -137,7 +138,8 @@ class Ant(Insect):
             if self.can_contain(place.ant):     # self is container and place is ant
                 self.ant_contained = place.ant
                 place.ant = self
-            elif place.ant.can_contain(self) and place.ant.ant_contained is None:   # self is ant and place is an emtpy container
+            # self is ant and place is an emtpy container
+            elif place.ant.can_contain(self) and place.ant.ant_contained is None:
                 place.ant.ant_contained = self
             else:
                 assert place.ant is None, 'Two ants in {0}'.format(place)
@@ -379,13 +381,29 @@ class BodyguardAnt(ContainerAnt):
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 8c
     implemented = True   # Change to True to view in the GUI
-    
-    def __init__(self, health = 2):
+
+    def __init__(self, health=2):
         super().__init__(health)
     # END Problem 8c
 
 # BEGIN Problem 9
 # The TankAnt class
+
+
+class TankAnt(ContainerAnt):
+    name = 'Tank'
+    food_cost = 6
+    implemented = True
+    damage = 1
+
+    def __init__(self, health=2):
+        super().__init__(health)
+
+    def action(self, gamestate):
+        if self.ant_contained:
+            self.ant_contained.action(gamestate)
+        for bee in self.place.bees[:]:
+            bee.reduce_health(self.damage)
 # END Problem 9
 
 
@@ -397,10 +415,20 @@ class Water(Place):
         its health to 0."""
         # BEGIN Problem 10
         "*** YOUR CODE HERE ***"
+        super().add_insect(insect)
+        if not insect.is_waterproof:
+            insect.reduce_health(insect.health)
         # END Problem 10
 
 # BEGIN Problem 11
 # The ScubaThrower class
+class ScubaThrower(ThrowerAnt):
+    name = 'Scuba'
+    food_cost = 6
+    
+    def __init__(self,health=1):
+        super().__init__(health)
+        self.is_waterproof = True
 # END Problem 11
 
 # BEGIN Problem 12
@@ -460,7 +488,8 @@ class Bee(Insect):
     name = 'Bee'
     damage = 1
     # OVERRIDE CLASS ATTRIBUTES HERE
-
+    is_waterproof = True
+    
     def sting(self, ant):
         """Attack an ANT, reducing its health by 1."""
         ant.reduce_health(self.damage)
