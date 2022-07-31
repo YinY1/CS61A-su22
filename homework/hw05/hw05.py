@@ -277,6 +277,7 @@ def make_trie(words):
         add_word(trie, word)
     return trie
 
+
 def add_word(trie: Tree, word: str):
     """
     words=['this','is','the','trie']
@@ -284,5 +285,36 @@ def add_word(trie: Tree, word: str):
     """
     if word == '':
         return
-    branch = trie.branches[0]
-    pass
+    branch = trie
+    for b in trie.branches:
+        if b.label == word[0]:
+            branch = b
+    if branch.label != word[0]:
+        branch = Tree(word[0])
+        trie.branches += [branch]
+    add_word(branch, word[1:])
+
+
+# Fall 2017 Final Q4a: O! Pascal
+def pascal_row(s: Link):
+    """
+    >>> a= Link.empty
+    >>> for _ in range(5):
+    ...     a = pascal_row(a)
+    ...     print(a)
+    <1>
+    <1 1>
+    <1 2 1>
+    <1 3 3 1>
+    <1 4 6 4 1>
+    """
+    if s is Link.empty:
+        return Link(1)
+    start = Link(1)
+    last, current = start, s
+    while current:
+        last.rest = Link(
+            current.first+current.rest.first) if current.rest else Link(1)
+        current = current.rest
+        last = last.rest
+    return start
