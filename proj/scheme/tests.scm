@@ -1,3 +1,7 @@
+;;; why? Tests terminated due to unhandled exception after line 22:
+;;; AttributeError: 'Y_ZmM419' object has no attribute 'end_of_line'
+;;; wtf is the end_of_line
+
 ;;; Test cases for Scheme.
 ;;;
 ;;; In order to run only a prefix of these examples, add the line
