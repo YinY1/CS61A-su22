@@ -13,6 +13,16 @@
         )  
     )
 )
+; solution
+(define (interleave lst1 lst2)
+  (if (or (null? lst1) (null? lst2))
+      (append lst1 lst2)
+      (cons (car lst1)
+            (cons (car lst2)
+                  (interleave (cdr lst1) (cdr lst2)))))
+)
+
+
 
 (define (my-filter pred lst) 
     (if (null? lst)
@@ -23,6 +33,14 @@
         )
     )
 )
+; solution
+(define (my-filter pred lst)
+  (cond ((null? lst) '())
+        ((pred (car lst)) (cons (car lst) (my-filter pred (cdr lst))))
+        (else (my-filter pred (cdr lst))))
+)
+
+
 
 (define (concatenate s) 
     (define (tail s sofar)
