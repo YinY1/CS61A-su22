@@ -34,6 +34,15 @@
                   )
   )
 )
+; solution
+(define (teacher-hold-class teacher)
+    (define class (teacher-get-class teacher))
+    (define new-students
+        (map (lambda (x) (student-attend-class x class)) (teacher-get-students teacher))
+    )
+    (teacher-create (teacher-get-name teacher) class new-students)
+)
+
 
 ; Rational Abstraction
 ; Helpers
