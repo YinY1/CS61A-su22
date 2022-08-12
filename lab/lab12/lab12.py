@@ -146,18 +146,19 @@ def add_trees(t1, t2):
         5
       5
     """
-    if _____________:
-        return _____________
-    if _____________:
-        return _____________
-    new_label = _____________
-    t1_branches, t2_branches = _____________
-    length_t1, length_t2 = _____________
-    if _____________:
-        _____________
-    elif _____________:
-        _____________
-    return _____________
+    if not t1:
+        return t2
+    if not t2:
+        return t1
+    new_label = t1.label+t2.label
+    t1_branches, t2_branches = t1.branches, t2.branches # useless
+    length_t1, length_t2 = len(t1_branches), len(t2_branches)
+    print("DEBUG:", length_t1, length_t2)
+    if length_t1 > length_t2:
+        t2_branches += [None]*(length_t1-length_t2)
+    elif length_t1 < length_t2:
+        t1_branches += [None]*(length_t2-length_t1)
+    return Tree(new_label, [add_trees(t1_branches[i], t2_branches[i]) for i in range(max(length_t1,length_t2))])
 
 
 def address_oneline(text):
@@ -178,10 +179,10 @@ def address_oneline(text):
     >>> address_oneline("790 lowercase St")
     False
     """
-    block_number = r'___'
-    cardinal_dir = r'___'  # whitespace is important!
-    street = r'___'
-    type_abbr = r'___'
+    block_number = r'\d{3,5}'
+    cardinal_dir = r'([NEWS] )?'  # whitespace is important!
+    street = r'([A-Z]\w+ )+'
+    type_abbr = r'[A-Z][a-z]{1,4}\b'
     street_name = f"{cardinal_dir}{street}{type_abbr}"
     return bool(re.search(f"{block_number} {street_name}", text))
 
@@ -244,10 +245,17 @@ class Player:
 
     def debate(self, other):
         "*** YOUR CODE HERE ***"
-
+        if random() < max(0.1, self.popularity / (self.popularity + other.popularity)):
+            self.popularity += 50
+        else:
+            self.popularity = max(0, self.popularity - 50)
+            
+        
     def speech(self, other):
         "*** YOUR CODE HERE ***"
-
+        self.votes += self.popularity//10
+        self.popularity += self.popularity//10
+        other.popularity -= other.popularity//10
     def choose(self, other):
         return self.speech
 
@@ -271,6 +279,13 @@ class Game:
     def play(self):
         while not self.game_over():
             "*** YOUR CODE HERE ***"
+            if self.turn % 2 == 0:
+                cur, other = self.p1, self.p2
+            else:
+                cur, other = self.p2, self.p1
+            cur.choose(other)(other)
+            self.turn += 1
+        print("DEBUG:",self.p1.votes, self.p2.votes)
         return self.winner()
 
     def game_over(self):
@@ -278,6 +293,11 @@ class Game:
 
     def winner(self):
         "*** YOUR CODE HERE ***"
+        if self.p1.votes > self.p2.votes:
+            return self.p1
+        elif self.p1.votes < self.p2.votes:
+            return self.p2
+        return None
 
 
 # Phase 3: New Players
@@ -294,6 +314,9 @@ class AggressivePlayer(Player):
 
     def choose(self, other):
         "*** YOUR CODE HERE ***"
+        if self.popularity > other.popularity:
+            return self.speech
+        return self.debate
 
 
 class CautiousPlayer(Player):
@@ -311,6 +334,9 @@ class CautiousPlayer(Player):
 
     def choose(self, other):
         "*** YOUR CODE HERE ***"
+        if self.popularity == 0:
+            return self.debate
+        return self.speech
 
 
 def intersection(lst_of_lsts):
@@ -332,6 +358,13 @@ def intersection(lst_of_lsts):
     """
     elements = []
     "*** YOUR CODE HERE ***"
+    shortest = 0
+    for i in range(1,len(lst_of_lsts)):
+        if len(lst_of_lsts[i]) < len(lst_of_lsts[shortest]):
+            shortest = i
+    for elem in lst_of_lsts[shortest]:
+        if all(elem in lst for lst in lst_of_lsts) and elem not in elements:
+            elements.append(elem)
     return elements
 
 
@@ -350,7 +383,7 @@ def deck(suits, ranks):
     []
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return [[s, i] for s in suits for i in ranks]
 
 
 class Link:
