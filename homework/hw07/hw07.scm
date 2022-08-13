@@ -39,3 +39,16 @@
       (find-key key keys values)
   )
 )
+; alternative solution
+(define (get-first-from-kwlist kwlist key)
+  (if (null? (get-keys-kwlist kwlist))
+    nil
+    (let ((values (get-values-kwlist kwlist))
+          (keys (get-keys-kwlist kwlist)))
+      (cond
+        ((equal? (car keys) key) (car values))
+        (else (get-first-from-kwlist (make-kwlist (cdr keys) (cdr values)) key))
+      )
+    )
+  )
+)
