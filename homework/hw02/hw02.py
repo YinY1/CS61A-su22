@@ -184,12 +184,16 @@ def funception(func_a, start):
             return None
         if start > stop:
             return func_a(start)
-        return product_using_accumulate(stop-1, func_a)
+        ret = 1
+        cur = start
+        while cur < stop:
+            ret *= func_a(cur)
+            cur += 1
+        return ret
     return func_b
 
 
 """You Again"""
-
 
 def parabola(x):
     """A parabola function (for testing the again function)."""
@@ -329,6 +333,3 @@ def tik(tok):
         nonlocal tok
         print(tok, gram)
     return insta
-
-
-tik(tik(5)(print(6)))(print(7))
